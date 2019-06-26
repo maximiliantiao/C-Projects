@@ -58,10 +58,41 @@ int main() {
 			} else if (ticTacToe[row][column] == 'X') {
 
 				printf("This has already been chosen!");
+
+				while (1) {
+
+					if (ticTacToe[row][column] == 'X') { 
+						printf("Enter a row number (0, 1, 2): ");
+						scanf("%d", &row);
+
+						printf("Enter a column number (0, 1, 2): ");
+						scanf("%d", &column);
+						printf("\n\n");
+
+					} else {
+						break;
+					}
+				}
+
 			
 			} else if (ticTacToe[row][column] == 'O') {
 
 				printf("This has already been chosen!");
+
+				while (1) {
+
+					if (ticTacToe[row][column] == '0') { 
+						printf("Enter a row number (0, 1, 2): ");
+						scanf("%d", &row);
+
+						printf("Enter a column number (0, 1, 2): ");
+						scanf("%d", &column);
+						printf("\n\n");
+
+					} else {
+						break;
+					}
+				}
 
 			} else {
 
@@ -102,14 +133,44 @@ int main() {
 			} else if (ticTacToe[row][column] == 'X') {
 
 				printf("This has already been chosen!");
+
+				while (1) {
+
+					if (ticTacToe[row][column] == 'X') { 
+						printf("Enter a row number (0, 1, 2): ");
+						scanf("%d", &row);
+
+						printf("Enter a column number (0, 1, 2): ");
+						scanf("%d", &column);
+						printf("\n\n");
+
+					} else {
+						break;
+					}
+				}
 			
 			} else if (ticTacToe[row][column] == 'O') {
 
 				printf("This has already been chosen!");
 
+				while (1) {
+
+					if (ticTacToe[row][column] == 'O') { 
+						printf("Enter a row number (0, 1, 2): ");
+						scanf("%d", &row);
+
+						printf("Enter a column number (0, 1, 2): ");
+						scanf("%d", &column);
+						printf("\n\n");
+
+					} else {
+						break;
+					}
+				}
+
 			} else {
 
-				printf("Invalid row and/or column number!");
+				printf("Invalid row and/or column number!\n\n");
 				
 			}
 
