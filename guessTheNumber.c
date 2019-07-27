@@ -58,8 +58,26 @@ void PvP() {
 	scanf("%d", &Player1_Number);
 	printf("\n");
 
+	
+	if (Player1_Number < 1 || Player1_Number > 20) {
+
+		while (Player1_Number < 1 || Player1_Number > 20) {
+
+			printf("Enter a valid number!\n\n");
+
+			int Player1_Number;
+			printf("Player 1 type in a number between 1 and 20: ");
+			scanf("%d", &Player1_Number);
+			printf("\n");
+
+			if (Player1_Number > 0 && Player1_Number < 21) {
+				break;
+			}
+		}
+	}
+
 	printf("Player 2 has 5 guesses to get the right number.\n\n");
-	printf("Begin guessing...\n");
+	printf("Begin guessing...\n\n");
 
 	int Player2_GuessesLeft = 5;	
 	while (Player2_GuessesLeft > 0) {
@@ -72,9 +90,29 @@ void PvP() {
 		if (Player2_Guess == Player1_Number) {
 			printf("Correct Guess! You win!\n\n");
 			Player2_GuessesLeft = 0;
-		} else {
+		} else if (Player2_Guess != Player1_Number) {
 			printf("Incorrect Guess! Try again.\n\n");
 			Player2_GuessesLeft--;
+		} else {
+			printf("Please enter a number between 1 and 20");
+
+			while(Player2_Guess < 1 || Player2_Guess > 21) {
+
+				int Player2_Guess;
+				printf("Guess: "); 
+				scanf("%d", &Player2_Guess);
+			    printf("\n");
+
+				if (Player2_Guess == Player1_Number) {
+					printf("Correct Guess! You win!\n\n");
+					Player2_GuessesLeft = 0;
+				} else if (Player2_Guess != Player1_Number) {
+					printf("Incorrect Guess! Try again.\n\n");
+					Player2_GuessesLeft--;
+				} else {
+					printf("Please enter a number between 1 and 20");
+				}
+			}
 		}
 	}
 }
