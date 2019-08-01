@@ -50,6 +50,7 @@ Option to play game again -> use while loop or something
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 void PvP() {
 
@@ -76,6 +77,8 @@ void PvP() {
 		}
 	}
 
+	sleep(2);
+
 	printf("Player 2 has 5 guesses to get the right number.\n\n");
 	printf("Begin guessing...\n\n");
 
@@ -93,6 +96,7 @@ void PvP() {
 		} else if (Player2_Guess != Player1_Number) {
 			printf("Incorrect Guess! Try again.\n\n");
 			Player2_GuessesLeft--;
+			sleep(0);
 		} else {
 			printf("Please enter a number between 1 and 20");
 
@@ -109,6 +113,7 @@ void PvP() {
 				} else if (Player2_Guess != Player1_Number) {
 					printf("Incorrect Guess! Try again.\n\n");
 					Player2_GuessesLeft--;
+					sleep(1);
 				} else {
 					printf("Please enter a number between 1 and 20");
 				}
@@ -144,15 +149,8 @@ void PvC() {
 		}
 	}
 }
-
-void CvC() {
-
-	srand(time(0)); 
-
-	printf("Computer 1 is randomly selecting a number...\n\n");
-	int randomNumber = rand() % 20;
-
-	printf("Computer 1 number: %d", randomNumber);
+/*
+void CvC(int Computer1Guess) {
 
 	printf("Computer 2 has 5 guesses to get the right number.\n\n");
 	printf("Begin guessing\n\n");
@@ -160,13 +158,14 @@ void CvC() {
 	int Computer2_GuessesLeft = 100;	
 	while (Computer2_GuessesLeft > 0) {
 
-		srand(time(0)); 
+		srand(1); 
 
 		int Computer2Guess = rand() % 20;
 
 		printf("Computer 2 guess: %d", Computer2Guess);
+		printf("\n\n");
 
-		if (Computer2Guess == randomNumber) {
+		if (Computer2Guess == Computer1Guess) {
 			printf("Correct Guess! you win!\n\n");
 			Computer2_GuessesLeft = 0;
 		} else {
@@ -176,10 +175,14 @@ void CvC() {
 	}
 
 }
-
+*/
 int main() {
 
+	printf("\n");
+
 	printf("Welcome to Guess the Number!\n\n");
+
+	sleep(1);
 
 	printf("================================================================================================================================================\n\n");
 
@@ -188,13 +191,15 @@ int main() {
 	printf("1) Player vs. Player\n");
 	printf("Player 1 will type in a number between 1 and 20,\nPlayer 2 will guess Player 1's number. Player 2 has 5 guesses.\n\n");
 
-	printf("2) Player vs. Computer\n\n");
+	printf("2) Player vs. Computer\n");
 	printf("Computer will randomly select a number,\nPlayer will guess the Computer's number.\n\n");
 
-	printf("3) Computer vs. Computer\n\n");
+	printf("3) Computer vs. Computer\n");
 	printf("Computer 1 will randomly select a number,\nComputer 2 will guess the Computer 1's number.\n\n");
 
 	printf("================================================================================================================================================\n\n");
+
+	sleep(1);
 
 	int gamemode_choice;
 	printf("Select a gamemode and type the number --> ");
@@ -202,13 +207,94 @@ int main() {
 	printf("\n");
 
 	if (gamemode_choice == 1) {
+
 		PvP();
+
 	} else if (gamemode_choice == 2) {
+
 		PvC();
+	/*
 	} else if (gamemode_choice == 3) {
-		CvC();
+
+		srand(time(NULL)); 
+
+		printf("Computer 1 is randomly selecting a number...\n\n");
+		int randomNumber = rand() % 20;
+
+		printf("Computer 1 number: %d", randomNumber);
+		printf("\n\n");
+
+		CvC(randomNumber);
+	*/
 	} else {
+
 		printf("Please enter a valid gamemode!");
+
+	}
+
+	char playAgain;
+	printf("Play again? Y / N ");
+	scanf("%c", &playAgain);
+	printf("\n");
+
+	while(playAgain == 'Y' || playAgain == 'y') {
+
+		printf("Welcome to Guess the Number!\n\n");
+
+		sleep(2);
+
+		printf("================================================================================================================================================\n\n");
+
+		printf("3 Gamemodes\n\n");
+
+		printf("1) Player vs. Player\n");
+		printf("Player 1 will type in a number between 1 and 20,\nPlayer 2 will guess Player 1's number. Player 2 has 5 guesses.\n\n");
+
+		printf("2) Player vs. Computer\n");
+		printf("Computer will randomly select a number,\nPlayer will guess the Computer's number.\n\n");
+
+		printf("3) Computer vs. Computer\n");
+		printf("Computer 1 will randomly select a number,\nComputer 2 will guess the Computer 1's number.\n\n");
+
+		printf("================================================================================================================================================\n\n");
+
+		sleep(2);
+
+		int gamemode_choice;
+		printf("Select a gamemode and type the number --> ");
+		scanf("%d", &gamemode_choice);
+		printf("\n");
+
+		if (gamemode_choice == 1) {
+
+			PvP();
+
+		} else if (gamemode_choice == 2) {
+
+			PvC();
+		/*
+		} else if (gamemode_choice == 3) {
+
+			srand(time(NULL)); 
+
+			printf("Computer 1 is randomly selecting a number...\n\n");
+			int randomNumber = rand() % 20;
+
+			printf("Computer 1 number: %d", randomNumber);
+			printf("\n\n");
+
+			CvC(randomNumber);
+		*/
+		} else {
+
+			printf("Please enter a valid gamemode!");
+
+		}
+
+		char playAgain;
+		printf("Play again? Y / N ");
+		scanf("%c", &playAgain);
+		printf("\n");
 	}
 
 	return 0;
