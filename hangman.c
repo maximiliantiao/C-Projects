@@ -33,14 +33,20 @@ int main() {
 
 	}
 
-
 	printf("\n");
 
 	printf("You may begin guessing.\n\n");
 
 	int lives = 10;
+
+	int b;
+		for (b = 0; b < strlen(secretWord); b++) {
+
+			printf("_ ");
+
+		}
 	
-	while(lives == 0) {
+	while(lives >= 0) {
 
 		printf("You have %d lives\n\n" , lives);
 
@@ -58,7 +64,7 @@ int main() {
 			scan("%c", &guessLetter);
 			printf("\n\n");
 
-			int b;
+			int c;
 			for (b = 0; b < strlen(secretWord); b++) {
 				if (guessLetter == secretWord[b]) {
 
@@ -95,9 +101,5 @@ int main() {
 
 	}
 	
-
-
-
-
 	return 0;
 }
