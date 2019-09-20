@@ -142,12 +142,55 @@ int matchesThirdCol(char ticTacToe[3][3]) {
 
 int matchesDiagonalA(char ticTacToe[3][3]) {
 	// Check for any matches on diagonal from top left to botton right
+	int k;
+	int numberOfXsInDiaA = 0;
+	int numberOfOsInDiaA = 0;
+	int l = 0;
+	for (k = 0; k < 3; k++) {
+	  if (ticTacToe[k][l] == 'O') {
+	    numberOfOsInDiaA++;
+			l++;
+	  }
+		if (ticTacToe[k][l] == 'X')  {
+	     numberOfXsInDiaA++;
+			l++;
+	  }
+	}
+
+	if (numberOfOsInDiaA == 3) {
+	  return 1;
+	} else if (numberOfXsInDiaA == 3) {
+	  return 2;
+	} else {
+	  return 0;
+	}
 }
 
 int matchesDiagonalB(char ticTacToe[3][3]) {
 	// Check for any matches on diagonal from bottom left to top right
-}
+	int m;
+	int numberOfXsInDiaB = 0;
+	int numberOfOsInDiaB = 0;
+	int n = 2;
+	for (m = 0; m < 3; m++) {
+		if (ticTacToe[m][n] == 'O') {
+			numberOfOsInDiaB++;
+			n--;
+		}
+		if (ticTacToe[m][n] == 'X')  {
+			 numberOfXsInDiaB++;
+			n--;
+		}
+	}
 
+	if (numberOfOsInDiaB == 3) {
+		return 1;
+	} else if (numberOfXsInDiaB == 3) {
+		return 2;
+	} else {
+		return 0;
+	}
+}
 
 int main() {
 
@@ -168,12 +211,21 @@ int main() {
 	scanf("\n\n%d", &gameMode);
 
 	// Gamemode 1
-	if (gameMode == 1) {/*
+	if (gameMode == 1) {
 		int row, column;
-		int counter = 0;
+		int counter = 1;
 
 		// Display 3 x 3 Grid
 		while(counter <= 9) {
+
+			int matchTop = matchesTopRow(ticTacToe);
+			int matchMid = matchesMidRow(ticTacToe);
+			int matchBottom = matchesBottomRow(ticTacToe);
+			int matchFirstCol = matchesFirstCol(ticTacToe);
+			int matchSecondCol = matchesSecondCol(ticTacToe);
+			int matchThirdCol = matchesThirdCol(ticTacToe);
+			int matchDiaA = matchesDiagonalA(ticTacToe);
+			int matchDiaB = matchesDiagonalB(ticTacToe);
 
 			printf("-----------\n");
 			int a, b;
@@ -216,7 +268,6 @@ int main() {
 					}
 				}
 
-
 			} else if (ticTacToe[row][column] == 'O') {
 
 				printf("This has already been chosen!\n\n");
@@ -234,6 +285,11 @@ int main() {
 				}
 			} else {
 				printf("Invalid row and/or column number!");
+			}
+
+			if (matchTop == 1 || matchMid == 1 || matchBottom == 1 || matchFirstCol == 1 || matchSecondCol == 1 || matchThirdCol == 1 || matchDiaA == 1 || matchDiaB == 1) {
+				printf("Player 1 Wins!\n");
+				exit(0);
 			}
 
 			// Player 2's Turn
@@ -258,7 +314,6 @@ int main() {
 			printf("Enter a column number (0, 1, 2): ");
 			scanf("\n%d", &column);
 			printf("\n\n");
-
 
 			if (ticTacToe[row][column] == '*') {
 				ticTacToe[row][column] = 'X';
@@ -294,22 +349,24 @@ int main() {
 			} else {
 				printf("Invalid row and/or column number!\n\n");
 			}
+
+			if (matchTop == 2 || matchMid == 2 || matchBottom == 2 || matchFirstCol == 2 || matchSecondCol == 2 || matchThirdCol == 2 || matchDiaA == 2 || matchDiaB == 2) {
+				printf("Plauer 2 Wins!\n");
+				exit(0);
+			}
+
 			counter++;
+
+			if (matchTop == 0 || matchMid == 0 || matchBottom == 0 || matchFirstCol == 0 || matchSecondCol == 0 || matchThirdCol == 0 || matchDiaA == 0 || matchDiaB == 0) {
+				if (counter == 9) {
+					printf("No One Wins!");
+					exit(0);
+				}
+			}
 		}
-	*/
-		//int matchTop = matchesTopRow(ticTacToe);
-		//int matchMid = matchesMidRow(ticTacToe);
-		//int matchBottom = matchesBottomRow(ticTacToe);
-		//int matchFirstCol = matchesFirstCol(ticTacToe);
-		//int matchSecondCol = matchesSecondCol(ticTacToe);
-		//int matchThirdCol = matchesThirdCol(ticTacToe);
-
- 		printf("%d", matchThirdCol);
 	} else {
-		printf("Invalid game mode");
+			printf("Invalid game mode");
 	}
-
-
 
 	return 0;
 }
