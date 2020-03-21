@@ -35,6 +35,7 @@ int main(int argc, char **argv) {
 
   // For UPDATE
   int column;
+  std::string column_name;
   std::string current;
   std::string replace;
 
@@ -130,28 +131,36 @@ int main(int argc, char **argv) {
             std::cout << "7. Exit\n";
             std::cin >> column;
 
-            std::cout << "Enter current " + column + ": ";
-            std::cin.ignore();
-            getline(std::cin, current);
-            std::cout << "Enter new " + column + ": ";
-            getline(std::cin, replace);
-
             if (column == 1) {
-              update = "UPDATE BANKSYS SET NAME='" + replace + "' WHERE NAME='" + current + "';";
+              column_name = "NAME";
             } else if (column == 2) {
-
+              column_name = "PHONE_NUMBER";
             } else if (column == 3) {
-
+              column_name = "EMAIL";
             } else if (column == 4) {
-
+              column_name = "DEPT";
             } else if (column == 5) {
-
+              column_name = "TITLE";
             } else if (column == 6) {
-
+              column_name = "AFF";
             } else {
-
+              std::cout << "\n";
               break;
             }
+
+            std::cout << "Enter current " + column_name + ": ";
+            std::cin.ignore();
+            getline(std::cin, current);
+            std::cout << "Enter new " + column_name + ": ";
+            getline(std::cin, replace);
+
+            update = "UPDATE BANKSYS SET " + column_name + "='" + replace + "' WHERE " + column_name + "='" + current + "';";
+            rc = sqlite3_exec(db, update.c_str(), NULL, 0, &error_msg);
+            if (rc != SQLITE_OK) {
+            std::cout << "Error: Cannot execute SQL Query\n";
+            return -1;
+            }
+            std::cout << "\n";
           }
           break;
       // DELETE ENTRY
@@ -172,10 +181,10 @@ int main(int argc, char **argv) {
           std::cout << "5. Title\n";
           std::cout << "6. Affiliation\n";
           std::cin >> delete_choice;
-          
+          std::cin.ignore();
+
           if (delete_choice == 1) {
             std::cout << "Enter a name: ";
-            std::cin.ignore();
             getline(std::cin, name);
             del = "DELETE FROM BANKSYS WHERE NAME='" + name + "';";
           } else if (delete_choice == 2) {
