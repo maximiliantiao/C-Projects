@@ -6,9 +6,6 @@
 
 /*
 TODO:
-Update Table
-
-
 
 */
 static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
@@ -20,13 +17,14 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 }
 
 int main(int argc, char **argv) {
+  // Variables
   sqlite3 *db;
   int rc;
   std::string create;
   std::string insert;
   std::string select;
   std::string del;
-  //std::string update;
+  std::string update;
 
   std::string name;
   std::string phone_number;
@@ -34,6 +32,11 @@ int main(int argc, char **argv) {
   std::string dept;
   std::string title;
   std::string aff;
+
+  // For UPDATE
+  int column;
+  std::string current;
+  std::string replace;
 
   char *error_msg;
   std::fstream fs;
@@ -70,6 +73,7 @@ int main(int argc, char **argv) {
   }
   int choice;
   while (true) {
+    // Main Menu
     std::cout << "1. Add student entry\n";
     std::cout << "2. Update student information\n";
     std::cout << "3. Delete student entry\n";
@@ -81,7 +85,7 @@ int main(int argc, char **argv) {
 
     if (typeid(choice) == typeid(int)) {
       switch (choice) {
-        // ADD ENTRY
+      // ADD ENTRY
         case 1:
           std::cout << "***** Adding student entry *****\n\n";
 
@@ -91,23 +95,17 @@ int main(int argc, char **argv) {
             std::cout << "Error: Cannot execute SELECT Query in ADD ENTRY\n";
             return -1;
           }
-
           std::cout << "Enter a name: ";
           std::cin.ignore();
           getline(std::cin, name);
-
           std::cout << "Enter a phone number: ";
           getline(std::cin, phone_number);
-
           std::cout << "Enter an email: ";
           getline(std::cin, email);
-          
           std::cout << "Enter a department: ";
           getline(std::cin, dept);
-
           std::cout << "Enter a title if applicable (otherwise input 'None'): ";
           getline(std::cin, title);
-
           std::cout << "Enter an affiliation (e.g.: undergraduate): ";
           getline(std::cin, aff);
           std::cout << "\n";
@@ -119,35 +117,46 @@ int main(int argc, char **argv) {
             return -1;
           }
           break;
-        // UPDATE ENTRY
+      // UPDATE ENTRY
         case 2:
-          std::cout << "Provide the following information to update a student entry\n";
+          while (true) {
+            std::cout << "What would you like to update: \n";
+            std::cout << "1. Name\n";
+            std::cout << "2. Phone number\n";
+            std::cout << "3. Email\n";
+            std::cout << "4. Department\n";
+            std::cout << "5. Title\n";
+            std::cout << "6. Affiliation\n";
+            std::cout << "7. Exit\n";
+            std::cin >> column;
 
-          std::cout << "Enter a name: ";
-          std::cin.ignore();
-          getline(std::cin, name);
+            std::cout << "Enter current " + column + ": ";
+            std::cin.ignore();
+            getline(std::cin, current);
+            std::cout << "Enter new " + column + ": ";
+            getline(std::cin, replace);
 
-          std::cout << "Enter a phone number: ";
-          getline(std::cin, phone_number);
+            if (column == 1) {
+              update = "UPDATE BANKSYS SET NAME='" + replace + "' WHERE NAME='" + current + "';";
+            } else if (column == 2) {
 
-          std::cout << "Enter an email: ";
-          getline(std::cin, email);
-          
-          std::cout << "Enter a department: ";
-          getline(std::cin, dept);
+            } else if (column == 3) {
 
-          std::cout << "Enter a title if applicable (otherwise input 'None'): ";
-          getline(std::cin, title);
+            } else if (column == 4) {
 
-          std::cout << "Enter an affiliation (e.g.: undergraduate): ";
-          getline(std::cin, aff);
+            } else if (column == 5) {
 
-          std::cout << "What would you like to update";
+            } else if (column == 6) {
+
+            } else {
+
+              break;
+            }
+          }
           break;
-        // DELETE ENTRY
+      // DELETE ENTRY
         case 3:
           std::cout << "\n***** Delete student entry *****\n\n";
-
           select = "SELECT * FROM BANKSYS;";
           rc = sqlite3_exec(db, select.c_str(), NULL, 0, &error_msg);
           if (rc != SQLITE_OK) {
@@ -200,7 +209,7 @@ int main(int argc, char **argv) {
           }
           std::cout << "\n";
           break;
-        // SHOW TABLE ENTRIES
+      // SHOW TABLE ENTRIES
         case 4:
           select = "SELECT * FROM BANKSYS";
           rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
@@ -209,7 +218,7 @@ int main(int argc, char **argv) {
             return -1;
           }
           break;
-        // EXIT DB
+      // EXIT DB
         case 5:
           sqlite3_close(db);
           std::cout << "\n********** Goodbye! **********\n\n";
