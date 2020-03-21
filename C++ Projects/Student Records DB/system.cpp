@@ -6,7 +6,6 @@
 
 /*
 TODO:
-
 */
 static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
   for(int i = 0; i<argc; i++) {
@@ -17,15 +16,18 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 }
 
 int main(int argc, char **argv) {
-  // Variables
+  // Database Variables
   sqlite3 *db;
   int rc;
+
+  // Database Actions
   std::string create;
   std::string insert;
   std::string select;
   std::string del;
   std::string update;
 
+  // Column Names
   std::string name;
   std::string phone_number;
   std::string email;
@@ -33,12 +35,13 @@ int main(int argc, char **argv) {
   std::string title;
   std::string aff;
 
-  // For UPDATE
+  // UPDATE variables
   int column;
   std::string column_name;
   std::string current;
   std::string replace;
 
+  // MISC variables
   char *error_msg;
   std::fstream fs;
 
@@ -46,11 +49,13 @@ int main(int argc, char **argv) {
   
   rc = sqlite3_open("student.db", &db);
 
+  // Find out size of database if it exists
   std::ifstream is ("student.db", std::ifstream::binary);
   is.seekg (0, is.end);
   int length = is.tellg();
   is.seekg (0, is.beg);
 
+  // If DB is empty, create table
   if (length == 0) {
     if (rc) {
       std::cout << "Cannot open database!\n";
@@ -72,6 +77,7 @@ int main(int argc, char **argv) {
       return -1;
     }
   }
+  // After DB and table are created, present Main Menu
   int choice;
   while (true) {
     // Main Menu
