@@ -29,9 +29,11 @@ int main(int argc, char **argv) {
   //std::string update;
 
   std::string name;
-  std::string age;
   std::string phone_number;
-  std::string address;
+  std::string email;
+  std::string dept;
+  std::string title;
+  std::string aff;
 
   char *error_msg;
   std::fstream fs;
@@ -55,12 +57,14 @@ int main(int argc, char **argv) {
     create = "CREATE TABLE BANKSYS( "
           "ID INTEGER PRIMARY KEY, "
           "NAME TEXT NOT NULL, "
-          "AGE TEXT NOT NULL, "
           "PHONE_NUMBER TEXT NOT NULL, "
-          "ADDRESS TEXT NOT NULL); ";
+          "EMAIL TEXT NOT NULL, "
+          "DEPT TEXT, "
+          "TITLE TEXT, "
+          "AFF TEXT NOT NULL); ";
     rc = sqlite3_exec(db, create.c_str(), NULL, 0, &error_msg);
     if (rc != SQLITE_OK) {
-      std::cout << "Error: Cannot execute SQL Query\n";
+      std::cout << "Error: Cannot create table\n";
       return -1;
     }
   }
@@ -84,22 +88,31 @@ int main(int argc, char **argv) {
           select = "SELECT * FROM BANKSYS;";
           rc = sqlite3_exec(db, select.c_str(), NULL, 0, &error_msg);
           if (rc != SQLITE_OK) {
-            std::cout << "Error: Cannot execute SQL Query\n";
+            std::cout << "Error: Cannot execute SELECT Query in ADD ENTRY\n";
             return -1;
           }
-          std::cin.ignore();
+
           std::cout << "Enter a name: ";
-          getline(std::cin, name);
-          std::cout << "Enter an age: ";
-          std::cin >> age;
-          std::cout << "Enter a phone number: ";
-          std::cin >> phone_number;
           std::cin.ignore();
-          std::cout << "Enter an address: ";
-          getline(std::cin, address);
+          getline(std::cin, name);
+
+          std::cout << "Enter a phone number: ";
+          getline(std::cin, phone_number);
+
+          std::cout << "Enter an email: ";
+          getline(std::cin, email);
+          
+          std::cout << "Enter a department: ";
+          getline(std::cin, dept);
+
+          std::cout << "Enter a title if applicable (otherwise input 'None'): ";
+          getline(std::cin, title);
+
+          std::cout << "Enter an affiliation (e.g.: undergraduate): ";
+          getline(std::cin, aff);
           std::cout << "\n";
 
-          insert = "INSERT INTO BANKSYS (NAME, AGE, PHONE_NUMBER, ADDRESS) VALUES ('" + name + "', '" + age + "', '" + phone_number + "', '" + address + "');";
+          insert = "INSERT INTO BANKSYS (NAME, PHONE_NUMBER, EMAIL, DEPT, TITLE, AFF) VALUES ('" + name + "', '" + phone_number + "', '" + email + "', '" + dept + "', '" + title + "', '" + aff + "');";
           rc = sqlite3_exec(db, insert.c_str(), NULL, 0, &error_msg);
           if (rc != SQLITE_OK) {
             std::cout << "Error: Cannot execute SQL Query\n";
@@ -110,17 +123,24 @@ int main(int argc, char **argv) {
         case 2:
           std::cout << "Provide the following information to update a student entry\n";
 
-          std::cin.ignore();
           std::cout << "Enter a name: ";
-          getline(std::cin, name);
-          std::cout << "Enter an age: ";
-          std::cin >> age;
-          std::cout << "Enter a phone number: ";
-          std::cin >> phone_number;
           std::cin.ignore();
-          std::cout << "Enter an address: ";
-          getline(std::cin, address);
-          std::cout << "\n";
+          getline(std::cin, name);
+
+          std::cout << "Enter a phone number: ";
+          getline(std::cin, phone_number);
+
+          std::cout << "Enter an email: ";
+          getline(std::cin, email);
+          
+          std::cout << "Enter a department: ";
+          getline(std::cin, dept);
+
+          std::cout << "Enter a title if applicable (otherwise input 'None'): ";
+          getline(std::cin, title);
+
+          std::cout << "Enter an affiliation (e.g.: undergraduate): ";
+          getline(std::cin, aff);
 
           std::cout << "What would you like to update";
           break;
@@ -137,28 +157,38 @@ int main(int argc, char **argv) {
           int delete_choice;
           std::cout << "Delete based on: \n";
           std::cout << "1. Name\n";
-          std::cout << "2. Age\n";
-          std::cout << "3. Phone number\n";
-          std::cout << "4. Address\n";
+          std::cout << "2. Phone number\n";
+          std::cout << "3. Email\n";
+          std::cout << "4. Department\n";
+          std::cout << "5. Title\n";
+          std::cout << "6. Affiliation\n";
           std::cin >> delete_choice;
           
           if (delete_choice == 1) {
             std::cout << "Enter a name: ";
-            std::cin >> name;
+            std::cin.ignore();
+            getline(std::cin, name);
             del = "DELETE FROM BANKSYS WHERE NAME='" + name + "';";
           } else if (delete_choice == 2) {
-            std::cout << "Enter an age: ";
-            std::cin >> age;
-            del = "DELETE FROM BANKSYS WHERE AGE='" + age + "';";
-          } else if (delete_choice == 3) {
             std::cout << "Enter a phone number: ";
-            std::cin >> phone_number;
+            getline(std::cin, phone_number);
             del = "DELETE FROM BANKSYS WHERE PHONE_NUMBER='" + phone_number + "';";
+          } else if (delete_choice == 3) {
+            std::cout << "Enter an email: ";
+            getline(std::cin, email);
+            del = "DELETE FROM BANKSYS WHERE EMAIL='" + email + "';";
           } else if (delete_choice == 4) {
-            std::cin.ignore();
-            std::cout << "Enter an address: ";
-            getline(std::cin, address);
-            del = "DELETE FROM BANKSYS WHERE ADDRESS='" + address + "';";
+            std::cout << "Enter a department: ";
+            getline(std::cin, dept);
+            del = "DELETE FROM BANKSYS WHERE DEPT='" + dept + "';";
+          } else if (delete_choice == 5) {
+            std::cout << "Enter a title: ";
+            getline(std::cin, title);
+            del = "DELETE FROM BANKSYS WHERE TITLE='" + title + "';";
+          } else if (delete_choice == 6) {
+            std::cout << "Enter an affiliation: ";
+            getline(std::cin, aff);
+            del = "DELETE FROM BANKSYS WHERE AFF='" + aff + "';";
           } else {
             std::cout << "Error: Choice unavailable\n\n";
             continue;
