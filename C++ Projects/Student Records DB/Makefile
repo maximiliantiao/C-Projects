@@ -1,5 +1,5 @@
-all:		system.o
-			g++ -o system system.cpp -l sqlite3
+all:		
+		g++ -o system system.cpp -lsqlite3
 
 clean:		
-			rm -rf system.o a.out system student.db
+		rm -rf system.o a.out system student.db
