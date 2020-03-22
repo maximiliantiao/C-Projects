@@ -1,4 +1,5 @@
 test:	
-	g++ -o test test.cpp -lncurses
+	g++ -o copy copy.cpp -lncurses -lsqlite3
 clean:
-	rm -rf test test.o
+	rm -rf copy copy.o copy.db
+
