@@ -1,5 +1,4 @@
 copy:	
-	g++ -o copy copy.cpp -lncurses -lsqlite3
+	g++ -o records records_ncurses.cpp -lncurses -lsqlite3
 clean:
-	rm -rf copy copy.o copy.db
-
+	rm -rf records records_ncurses.o records.db
