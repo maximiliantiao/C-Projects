@@ -1,28 +1,64 @@
-/*
+#include <iostream>
+#include <string.h>
+#include "todo.h"
 
-TO_DO List Program
-
-struct to_do_item {
-  std::string item;
-  int priority;
-  std:string date;
+ListItem *new_item(std::string task, int priority, std::string date) {
+  ListItem *todo_item = (ListItem *)malloc(sizeof(ListItem));
+  if (todo_item != NULL) {
+    todo_item->task = task;
+    todo_item->priority = priority;
+    todo_item->date = date;
+    return todo_item;
+  }
+  return NULL;
 }
 
-array_of_structs = [to_do_item, to_do_item...];
+void delete_item(ListItem *item) {
+  free(item);
+  item = NULL;
+  return;
+}
 
-print out to_do list in the following ways:
-1. By Priority Number
-2. Alphabetical based on item
-3. No Order
-4. Simple View / Detailed View
+ListItem *update_item(ListItem *item) {
+  while (true) {
+    int update_choice;
+    std::string updated_task; 
+    int updated_proirity;
+    std::string updated_date;
 
-Features:
-1. Add item
-2. Delete item
-3. Update item
+    std::cout << "What would you like to update: ";
+    std::cout << "1. Task\n";
+    std::cout << "2. Priority\n";
+    std::cout << "3. Date\n";
+    std::cin >> update_choice;
 
+    switch (update_choice) {
+      case 1:
+        std::cout << "Enter updated task: ";
+        std::cin >> updated_task;
+        item->task = updated_task;
+        break;
+      case 2:
+        std::cout << "Enter updated priority: ";
+        std::cin >> updated_proirity;
+        item->priority = updated_proirity;
+        break;
+      case 3:
+        std::cout << "Enter updated date: ";
+        std::cin >> updated_date;
+        item->date = updated_date;
+        break;
+      default:
+        std::cout << "Error: Choice unavailable\n";
+        continue;
+    }
+  }
+  return item;
+}
 
-Future features:
-1. Create several to_do lists
-2. More member definitions in to_do_item struct
-*/
+void print_item(ListItem *item) {
+  std::cout << "Task: " << item->task << "\n";
+  std::cout << "Priority: " << item->priority << "\n";
+  std::cout << "Date: " << item->date << "\n";
+  return;
+}
