@@ -16,4 +16,6 @@ void destroy_task(ListItem *);
 
 void update_item(ListItem **array, int task_number, int size);
 
-void print_item(ListItem *item);
+void print_simple(ListItem *item);
+
+void print_details(ListItem *item);

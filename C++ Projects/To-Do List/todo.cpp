@@ -75,7 +75,12 @@ void update_item(ListItem **array, int task_number, int size) {
   return;
 }
 
-void print_item(ListItem *item) {
+void print_simple(ListItem *item) {
+  std::cout << "Task: " << item->task << "\n";
+  return;
+}
+
+void print_details(ListItem *item) {
   std::cout << "Task No: " << item->task_no << "\n";
   std::cout << "Task: " << item->task << "\n";
   std::cout << "Priority: " << item->priority << "\n";

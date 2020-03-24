@@ -9,12 +9,9 @@ TO_DO List Program
 print out to_do list in the following ways:
 1. By Priority Number
 2. Alphabetical based on item
-3. No Order
-4. Simple View / Detailed View
 
 Future features:
-1. Create several to_do lists
-2. More member definitions in to_do_item struct
+1. More member definitions in to_do_item struct
 */
 
 int main (void) {
@@ -26,6 +23,7 @@ int main (void) {
   int index = 0;
   ListItem *add_task;
   int del_index;
+  bool avail_choice = true;
 
   ListItem *task_array[100];
   while (true) {
@@ -91,8 +89,27 @@ int main (void) {
           std::cout << "No Tasks\n";
           break;
         }
-        for (int i = 0; i < index; i++) {
-          print_item(task_array[i]);
+        avail_choice = true;
+        int print_choice;
+        std::cout << "Print in: \n";
+        std::cout << "1. Simple View\n";
+        std::cout << "2. Detailed View\n";
+        std::cin >> print_choice;
+
+        while (avail_choice) {
+          if (print_choice == 1) {
+            for (int i = 0; i < index; i++) {
+              print_simple(task_array[i]);
+            }
+            avail_choice = false;
+          } else if (print_choice == 2) {
+            for (int i = 0; i < index; i++) {
+              print_details(task_array[i]);
+            }
+            avail_choice = false;
+          } else {
+            std::cout << "Error: Choice unavailable\n";
+          }
         }
         break;
       case 5:
