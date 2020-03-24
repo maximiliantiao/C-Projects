@@ -30,14 +30,18 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
   }
   printw("\n");
   refresh();
+
   return 0;
 }
 
 void add_entry(std::string select, std::string insert, sqlite3 *db, char *error_msg, int rc) {
+  init_pair(2, COLOR_RED, COLOR_BLACK);
+  attron(COLOR_PAIR(2));
+  attron(A_BOLD);
   printw("\n\n***** Adding student entry *****\n\n");
   refresh();
 
-  select = "SELECT * FROM BANKSYS;";
+  select = "SELECT * FROM RECORDSYS;";
   rc = sqlite3_exec(db, select.c_str(), NULL, 0, &error_msg);
   if (rc != SQLITE_OK) {
     printw("Error: Cannot execute SELECT Query in ADD ENTRY\n");
@@ -72,16 +76,21 @@ void add_entry(std::string select, std::string insert, sqlite3 *db, char *error_
   str_title = title;
   str_aff = aff;
 
-  insert = "INSERT INTO BANKSYS (NAME, PHONE_NUMBER, EMAIL, DEPT, TITLE, AFF) VALUES ('" + str_name + "', '" + str_phone_number + "', '" + str_email + "', '" + str_dept + "', '" + str_title + "', '" + str_aff + "');";
+  insert = "INSERT INTO RECORDSYS (NAME, PHONE_NUMBER, EMAIL, DEPT, TITLE, AFF) VALUES ('" + str_name + "', '" + str_phone_number + "', '" + str_email + "', '" + str_dept + "', '" + str_title + "', '" + str_aff + "');";
   rc = sqlite3_exec(db, insert.c_str(), NULL, 0, &error_msg);
   if (rc != SQLITE_OK) {
     printw("Error: Cannot execute SQL Query\n");
     refresh();
     exit(-1);
   }
+  attroff(COLOR_PAIR(2));
+  attroff(A_BOLD);
 }
 
 void update_entry(std::string select, std::string update, sqlite3 *db, char *error_msg, int rc) {
+  init_pair(3, COLOR_BLUE, COLOR_BLACK);
+  attron(COLOR_PAIR(3));
+  attron(A_BOLD);
   int column;
   std::string column_name;
 
@@ -131,7 +140,7 @@ void update_entry(std::string select, std::string update, sqlite3 *db, char *err
     getstr(replace);
     str_replace = replace;
 
-    update = "UPDATE BANKSYS SET " + column_name + "='" + str_replace + "' WHERE " + column_name + "='" + str_current + "';";
+    update = "UPDATE RECORDSYS SET " + column_name + "='" + str_replace + "' WHERE " + column_name + "='" + str_current + "';";
     rc = sqlite3_exec(db, update.c_str(), NULL, 0, &error_msg);
     if (rc != SQLITE_OK) {
       printw("Error: Cannot execute SQL Query\n");
@@ -140,12 +149,17 @@ void update_entry(std::string select, std::string update, sqlite3 *db, char *err
     }
     printw("\n");
   }
+  attroff(COLOR_PAIR(3));
+  attroff(A_BOLD);
 }
 
 void delete_entry(std::string select, std::string del, sqlite3 *db, char *error_msg, int rc) {
+  init_pair(4, COLOR_MAGENTA, COLOR_BLACK);
+  attron(COLOR_PAIR(4));
+  attron(A_BOLD);
   printw("\n***** Delete student entry *****\n\n");
   refresh();
-  select = "SELECT * FROM BANKSYS;";
+  select = "SELECT * FROM RECORDSYS;";
   rc = sqlite3_exec(db, select.c_str(), NULL, 0, &error_msg);
   if (rc != SQLITE_OK) {
     printw("Error: Cannot execute SQL Query\n");
@@ -160,6 +174,7 @@ void delete_entry(std::string select, std::string del, sqlite3 *db, char *error_
   printw("4. Department\n");
   printw("5. Title\n");
   printw("6. Affiliation\n");
+  printw("7. Exit\n");
   printw("\n");
   refresh();
   delete_choice = getch();
@@ -171,37 +186,39 @@ void delete_entry(std::string select, std::string del, sqlite3 *db, char *error_
     refresh();
     getstr(name);
     str_name = name;
-    del = "DELETE FROM BANKSYS WHERE NAME='" + str_name + "';";
+    del = "DELETE FROM RECORDSYS WHERE NAME='" + str_name + "';";
   } else if (delete_choice == 50) {
     printw("Enter a phone number: ");
     refresh();
     getstr(phone_number);
     str_phone_number = phone_number;
-    del = "DELETE FROM BANKSYS WHERE PHONE_NUMBER='" + str_phone_number + "';";
+    del = "DELETE FROM RECORDSYS WHERE PHONE_NUMBER='" + str_phone_number + "';";
   } else if (delete_choice == 51) {
     printw("Enter an email: ");
     refresh();
     getstr(email);
     str_email = email;
-    del = "DELETE FROM BANKSYS WHERE EMAIL='" + str_email + "';";
+    del = "DELETE FROM RECORDSYS WHERE EMAIL='" + str_email + "';";
   } else if (delete_choice == 52) {
     printw("Enter a department: ");
     refresh();
     getstr(dept);
     str_dept = dept;
-    del = "DELETE FROM BANKSYS WHERE DEPT='" + str_dept + "';";
+    del = "DELETE FROM RECORDSYS WHERE DEPT='" + str_dept + "';";
   } else if (delete_choice == 53) {
     printw("Enter a title: ");
     refresh();
     getstr(title);
     str_title = title;
-    del = "DELETE FROM BANKSYS WHERE TITLE='" + str_title + "';";
+    del = "DELETE FROM RECORDSYS WHERE TITLE='" + str_title + "';";
   } else if (delete_choice == 54) {
     printw("Enter an affiliation: ");
     refresh();
     getstr(aff);
     str_aff = aff;
-    del = "DELETE FROM BANKSYS WHERE AFF='" + str_aff + "';";
+    del = "DELETE FROM RECORDSYS WHERE AFF='" + str_aff + "';";
+  } else if (delete_choice == 55) {
+
   } else {
     printw("Error: Choice unavailable\n\n");
     refresh();
@@ -214,6 +231,87 @@ void delete_entry(std::string select, std::string del, sqlite3 *db, char *error_
   }
   printw("\n");
   refresh();
+  attroff(COLOR_PAIR(4));
+  attroff(A_BOLD);
+}
+
+void search(std::string select, sqlite3 *db, char *error_msg, int rc) {
+  init_pair(6, COLOR_CYAN, COLOR_BLACK);
+  attron(COLOR_PAIR(6));
+  attron(A_BOLD);
+  while (true) {
+    erase();
+    int search_choice;
+    printw("\n\n***** Search for student entry *****\n\n");
+    printw("Search based on: \n");
+    printw("1. Name\n");
+    printw("2. Phone number\n");
+    printw("3. Email\n");
+    printw("4. Department\n");
+    printw("5. Title\n");
+    printw("6. Affiliation\n");
+    printw("7. Exit\n");
+    refresh();
+    search_choice = getch();
+    printw("\n");
+    refresh();
+
+    if (search_choice == 49) {
+      printw("Enter a name: ");
+      refresh();
+      getstr(name);
+      str_name = name;
+      select = "SELECT * FROM RECORDSYS WHERE NAME='" + str_name +"';";
+    } else if (search_choice == 50) {
+      printw("Enter a phone number: ");
+      refresh();
+      getstr(phone_number);
+      str_phone_number = phone_number;
+      select = "SELECT * FROM RECORDSYS WHERE PHONE_NUMBER='" + str_phone_number +"';";
+    } else if (search_choice == 51) {
+      printw("Enter a email: ");
+      refresh();
+      getstr(email);
+      str_email = email;
+      select = "SELECT * FROM RECORDSYS WHERE EMAIL='" + str_email +"';";
+    } else if (search_choice == 52) {
+      printw("Enter a department: ");
+      refresh();
+      getstr(dept);
+      str_dept = dept;
+      select = "SELECT * FROM RECORDSYS WHERE DEPT='" + str_dept +"';";
+    } else if (search_choice == 53) {
+      printw("Enter a title: ");
+      refresh();
+      getstr(title);
+      str_title = title;
+      select = "SELECT * FROM RECORDSYS WHERE TITLE='" + str_title +"';";
+    } else if (search_choice == 54) {
+      printw("Enter an affiliation: ");
+      refresh();
+      getstr(aff);
+      str_aff = aff;
+      select = "SELECT * FROM RECORDSYS WHERE AFF='" + str_aff +"';";
+    } else if (search_choice == 55) {
+      break;
+    } else {
+      printw( "Error: Choice unavailable\n");
+      refresh();
+      continue;
+    }
+    erase();
+    printw("\n\n***** Search Results *****\n\n");
+    rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
+    if (rc != SQLITE_OK) {
+      printw("Error: Cannot execute SQL Query\n");
+      refresh();
+      exit(-1);
+    } 
+    printw("Press any key to continue...");
+    getch();
+    attroff(COLOR_PAIR(6));
+    attroff(A_BOLD);
+  }
 }
 
 int main(int argc, char **argv) {
@@ -247,7 +345,7 @@ int main(int argc, char **argv) {
       return -1;
     }
     // Create a table
-    create = "CREATE TABLE BANKSYS( "
+    create = "CREATE TABLE RECORDSYS ( "
           "ID INTEGER PRIMARY KEY, "
           "NAME TEXT NOT NULL, "
           "PHONE_NUMBER TEXT NOT NULL, "
@@ -275,7 +373,8 @@ int main(int argc, char **argv) {
     printw("2. Update student information\n");
     printw("3. Delete student entry\n");
     printw("4. Show student entries\n");
-    printw("5. Exit\n\n");
+    printw("5. Search\n");
+    printw("6. Exit\n\n");
     printw("Enter choice: ");
     refresh();
     int choice = getch();
@@ -300,7 +399,10 @@ int main(int argc, char **argv) {
         break;
     // SHOW TABLE ENTRIES
       case 52:
-        select = "SELECT * FROM BANKSYS";
+        init_pair(5, COLOR_WHITE, COLOR_BLACK);
+        attron(COLOR_PAIR(5));
+        attron(A_BOLD);
+        select = "SELECT * FROM RECORDSYS";
         printw("\n\n***** Current Student Entries *****\n\n");
         refresh();
         rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
@@ -312,9 +414,15 @@ int main(int argc, char **argv) {
         printw("Press any key to continue...");
         getch();
         refresh();
+        attroff(COLOR_PAIR(5));
+        attroff(A_BOLD);
+        break;
+    // SEARCH
+      case 53:
+        search(select, db, error_msg, rc);
         break;
     // EXIT DB
-      case 53:
+      case 54:
         sqlite3_close(db);
         printw("\n********** Goodbye! **********\n\n");
         refresh();
