@@ -82,6 +82,9 @@ int main (void) {
           std::cout << "Error: Cannot update task if no tasks exists!\n";
           break;
         }
+        std::cout << "Enter task number: ";
+        std::cin >> task_number;
+        update_item(task_array, task_number, index);
         break;
       case 4:
         if (index == 0) {
@@ -98,7 +101,7 @@ int main (void) {
             destroy_task(task_array[i]);
           }
         }
-        std::cout << "***** Goodbye *****";
+        std::cout << "***** Goodbye *****\n\n";
         return 0;
       default:
         break;

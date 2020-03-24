@@ -33,41 +33,46 @@ void destroy_task(ListItem *item) {
   return;
 }
 
-ListItem *update_item(ListItem *item) {
+void update_item(ListItem **array, int task_number, int size) {
+  ListItem *to_update;
+  for (int i = 0; i < size; i++) {
+    if (array[i]->task_no == task_number) {
+      to_update = array[i];
+    }
+  }
   while (true) {
     int update_choice;
     std::string updated_task; 
     int updated_proirity;
     std::string updated_date;
 
-    std::cout << "What would you like to update: ";
+    std::cout << "What would you like to update: \n";
     std::cout << "1. Task\n";
     std::cout << "2. Priority\n";
     std::cout << "3. Date\n";
+    std::cout << "4. Exit\n";
     std::cin >> update_choice;
 
-    switch (update_choice) {
-      case 1:
-        std::cout << "Enter updated task: ";
-        std::cin >> updated_task;
-        item->task = updated_task;
-        break;
-      case 2:
-        std::cout << "Enter updated priority: ";
-        std::cin >> updated_proirity;
-        item->priority = updated_proirity;
-        break;
-      case 3:
-        std::cout << "Enter updated date: ";
-        std::cin >> updated_date;
-        item->date = updated_date;
-        break;
-      default:
-        std::cout << "Error: Choice unavailable\n";
-        continue;
+    if (update_choice == 1) {
+      std::cout << "Enter updated task: ";
+      std::cin >> updated_task;
+      to_update->task = updated_task;
+    } else if (update_choice == 2) {
+      std::cout << "Enter updated priority: ";
+      std::cin >> updated_proirity;
+      to_update->priority = updated_proirity;
+    } else if (update_choice == 3) {
+      std::cout << "Enter updated date: ";
+      std::cin >> updated_date;
+      to_update->date = updated_date;
+    } else if (update_choice == 4) {
+      break;
+    } else {
+      std::cout << "Error: Choice unavailable\n";
+      continue;
     }
   }
-  return item;
+  return;
 }
 
 void print_item(ListItem *item) {
