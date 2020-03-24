@@ -1,5 +1,5 @@
 all:		
-		g++ -o system system.cpp -lsqlite3
+		g++ -o records records.cpp -lsqlite3
 
 clean:		
-		rm -rf system.o a.out system student.db
+		rm -rf records.o records student.db

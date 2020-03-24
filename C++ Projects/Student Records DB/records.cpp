@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
     }
 
     // Create a table
-    create = "CREATE TABLE BANKSYS( "
+    create = "CREATE TABLE RECORDSYS( "
           "ID INTEGER PRIMARY KEY, "
           "NAME TEXT NOT NULL, "
           "PHONE_NUMBER TEXT NOT NULL, "
@@ -82,7 +82,8 @@ int main(int argc, char **argv) {
     std::cout << "2. Update student information\n";
     std::cout << "3. Delete student entry\n";
     std::cout << "4. Show student entry\n";
-    std::cout << "5. Exit\n\n";
+    std::cout << "5. Search\n";
+    std::cout << "6. Exit\n\n";
     std::cout << "Enter choice: ";
     std::cin >> choice;
     std::cout << "\n";
@@ -93,7 +94,7 @@ int main(int argc, char **argv) {
         case 1:
           std::cout << "***** Adding student entry *****\n\n";
 
-          select = "SELECT * FROM BANKSYS;";
+          select = "SELECT * FROM RECORDSYS;";
           rc = sqlite3_exec(db, select.c_str(), NULL, 0, &error_msg);
           if (rc != SQLITE_OK) {
             std::cout << "Error: Cannot execute SELECT Query in ADD ENTRY\n";
@@ -114,7 +115,7 @@ int main(int argc, char **argv) {
           getline(std::cin, aff);
           std::cout << "\n";
 
-          insert = "INSERT INTO BANKSYS (NAME, PHONE_NUMBER, EMAIL, DEPT, TITLE, AFF) VALUES ('" + name + "', '" + phone_number + "', '" + email + "', '" + dept + "', '" + title + "', '" + aff + "');";
+          insert = "INSERT INTO RECORDSYS (NAME, PHONE_NUMBER, EMAIL, DEPT, TITLE, AFF) VALUES ('" + name + "', '" + phone_number + "', '" + email + "', '" + dept + "', '" + title + "', '" + aff + "');";
           rc = sqlite3_exec(db, insert.c_str(), NULL, 0, &error_msg);
           if (rc != SQLITE_OK) {
             std::cout << "Error: Cannot execute SQL Query\n";
@@ -157,7 +158,7 @@ int main(int argc, char **argv) {
             std::cout << "Enter new " + column_name + ": ";
             getline(std::cin, replace);
 
-            update = "UPDATE BANKSYS SET " + column_name + "='" + replace + "' WHERE " + column_name + "='" + current + "';";
+            update = "UPDATE RECORDSYS SET " + column_name + "='" + replace + "' WHERE " + column_name + "='" + current + "';";
             rc = sqlite3_exec(db, update.c_str(), NULL, 0, &error_msg);
             if (rc != SQLITE_OK) {
             std::cout << "Error: Cannot execute SQL Query\n";
@@ -169,7 +170,7 @@ int main(int argc, char **argv) {
       // DELETE ENTRY
         case 3:
           std::cout << "\n***** Delete student entry *****\n\n";
-          select = "SELECT * FROM BANKSYS;";
+          select = "SELECT * FROM RECORDSYS;";
           rc = sqlite3_exec(db, select.c_str(), NULL, 0, &error_msg);
           if (rc != SQLITE_OK) {
             std::cout << "Error: Cannot execute SQL Query\n";
@@ -189,27 +190,27 @@ int main(int argc, char **argv) {
           if (delete_choice == 1) {
             std::cout << "Enter a name: ";
             getline(std::cin, name);
-            del = "DELETE FROM BANKSYS WHERE NAME='" + name + "';";
+            del = "DELETE FROM RECORDSYS WHERE NAME='" + name + "';";
           } else if (delete_choice == 2) {
             std::cout << "Enter a phone number: ";
             getline(std::cin, phone_number);
-            del = "DELETE FROM BANKSYS WHERE PHONE_NUMBER='" + phone_number + "';";
+            del = "DELETE FROM RECORDSYS WHERE PHONE_NUMBER='" + phone_number + "';";
           } else if (delete_choice == 3) {
             std::cout << "Enter an email: ";
             getline(std::cin, email);
-            del = "DELETE FROM BANKSYS WHERE EMAIL='" + email + "';";
+            del = "DELETE FROM RECORDSYS WHERE EMAIL='" + email + "';";
           } else if (delete_choice == 4) {
             std::cout << "Enter a department: ";
             getline(std::cin, dept);
-            del = "DELETE FROM BANKSYS WHERE DEPT='" + dept + "';";
+            del = "DELETE FROM RECORDSYS WHERE DEPT='" + dept + "';";
           } else if (delete_choice == 5) {
             std::cout << "Enter a title: ";
             getline(std::cin, title);
-            del = "DELETE FROM BANKSYS WHERE TITLE='" + title + "';";
+            del = "DELETE FROM RECORDSYS WHERE TITLE='" + title + "';";
           } else if (delete_choice == 6) {
             std::cout << "Enter an affiliation: ";
             getline(std::cin, aff);
-            del = "DELETE FROM BANKSYS WHERE AFF='" + aff + "';";
+            del = "DELETE FROM RECORDSYS WHERE AFF='" + aff + "';";
           } else {
             std::cout << "Error: Choice unavailable\n\n";
             continue;
@@ -223,15 +224,97 @@ int main(int argc, char **argv) {
           break;
       // SHOW TABLE ENTRIES
         case 4:
-          select = "SELECT * FROM BANKSYS";
+          select = "SELECT * FROM RECORDSYS";
           rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
           if (rc != SQLITE_OK) {
             std::cout << "Error: Cannot execute SQL Query\n";
             return -1;
           }
           break;
-      // EXIT DB
+      // SEARCH
         case 5:
+          while (true) {
+            int search_choice;
+            std::cout << "Search based on: \n";
+            std::cout << "1. Name\n";
+            std::cout << "2. Phone number\n";
+            std::cout << "3. Email\n";
+            std::cout << "4. Department\n";
+            std::cout << "5. Title\n";
+            std::cout << "6. Affiliation\n";
+            std::cout << "7. Exit\n";
+            std::cin >> search_choice;
+
+            if (search_choice == 1) {
+              std::cout << "Enter a name: ";
+              std::cin.ignore();
+              getline(std::cin, name);
+              select = "SELECT * FROM RECORDSYS WHERE NAME='" + name +"';";
+              rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
+              if (rc != SQLITE_OK) {
+                std::cout << "Error: Cannot execute SQL Query\n";
+                return -1;
+              } 
+            } else if (search_choice == 2) {
+              std::cout << "Enter a phone number: ";
+              std::cin.ignore();
+              getline(std::cin, phone_number);
+              select = "SELECT * FROM RECORDSYS WHERE PHONE_NUMBER='" + phone_number +"';";
+              rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
+              if (rc != SQLITE_OK) {
+                std::cout << "Error: Cannot execute SQL Query\n";
+                return -1;
+              } 
+            } else if (search_choice == 3) {
+              std::cout << "Enter a email: ";
+              std::cin.ignore();
+              getline(std::cin, email);
+              select = "SELECT * FROM RECORDSYS WHERE EMAIL='" + email +"';";
+              rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
+              if (rc != SQLITE_OK) {
+                std::cout << "Error: Cannot execute SQL Query\n";
+                return -1;
+              } 
+            } else if (search_choice == 4) {
+              std::cout << "Enter a department: ";
+              std::cin.ignore();
+              getline(std::cin, dept);
+              select = "SELECT * FROM RECORDSYS WHERE DEPT='" + dept +"';";
+              rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
+              if (rc != SQLITE_OK) {
+                std::cout << "Error: Cannot execute SQL Query\n";
+                return -1;
+              } 
+            } else if (search_choice == 5) {
+              std::cout << "Enter a title: ";
+              std::cin.ignore();
+              getline(std::cin, title);
+              select = "SELECT * FROM RECORDSYS WHERE TITLE='" + title +"';";
+              rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
+              if (rc != SQLITE_OK) {
+                std::cout << "Error: Cannot execute SQL Query\n";
+                return -1;
+              } 
+            } else if (search_choice == 6) {
+              std::cout << "Enter an affiliation: ";
+              std::cin.ignore();
+              getline(std::cin, aff);
+              select = "SELECT * FROM RECORDSYS WHERE AFF='" + aff +"';";
+              rc = sqlite3_exec(db, select.c_str(), callback, 0, &error_msg);
+              if (rc != SQLITE_OK) {
+                std::cout << "Error: Cannot execute SQL Query\n";
+                return -1;
+              } 
+            } else if (search_choice == 7) {
+              break;
+            } else {
+              std::cout << "Error: Choice unavailable\n";
+              continue;
+            }
+          }
+          break;
+      // EXIT DB
+        case 6:
           sqlite3_close(db);
           std::cout << "\n********** Goodbye! **********\n\n";
           return 0;
