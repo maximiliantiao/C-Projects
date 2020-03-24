@@ -8,7 +8,7 @@ typedef struct to_do_list {
   std::string date;
 } ListItem;
 
-ListItem *new_item(std::string item, int priority, std::string date);
+ListItem *new_item(std::string item, int priority, std::string date, int index);
 
 int deleted_item(ListItem **array, int task_number, int size);
 

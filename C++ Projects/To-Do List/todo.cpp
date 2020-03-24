@@ -3,34 +3,33 @@
 #include "todo.hpp"
 #include <vector>
 
-int count = 0;
-ListItem *new_item(std::string task, int priority, std::string date) {
+ListItem *new_item(std::string task, int priority, std::string date, int index) {
   ListItem *todo_item = (ListItem *)malloc(sizeof(ListItem));
   if (todo_item != NULL) {
-    todo_item->task_no = count;
+    todo_item->task_no = index;
     todo_item->task = task;
     todo_item->priority = priority;
     todo_item->date = date;
-    count += 1;
     return todo_item;
   }
   return NULL;
 }
 
 int deleted_item(ListItem **array, int task_number, int size) {
-  for (int i = 0; i < 100; i++) {
+  if (size == 0) {
+    return 0;
+  }
+  for (int i = 0; i < size; i++) {
     if (array[i]->task_no == task_number) {
-      count -= 1;
       return i;
     }
   }
-  return (int) NULL;
+  return -1;
 }
 
 void destroy_task(ListItem *item) {
   free(item);
   item = NULL;
-  count -= 1;
   return;
 }
 

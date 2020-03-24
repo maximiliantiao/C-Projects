@@ -6,8 +6,6 @@
 /*
 TO_DO List Program
 
-array_of_structs = [to_do_item, to_do_item...];
-
 print out to_do list in the following ways:
 1. By Priority Number
 2. Alphabetical based on item
@@ -24,6 +22,7 @@ int main (void) {
   std::string task;
   int priority;
   std::string date;
+
   int index = 0;
   ListItem *add_task;
   int del_index;
@@ -52,23 +51,37 @@ int main (void) {
         std::cout << "Enter date (MM/DD/YYYY): ";
         std::cin.ignore();
         getline(std::cin, date);
-        add_task = new_item(task, priority, date);
+        add_task = new_item(task, priority, date, index);
         task_array[index] = add_task;
         index += 1;
         break;
       case 2:
+        if (index == 0) {
+          std::cout << "Error: Cannot delete task if no tasks exists!\n";
+          break;
+        }
         std::cout << "Enter task number: ";
         std::cin >> task_number;
         del_index = deleted_item(task_array, task_number, index);
-        if (del_index) {
-          for (int i = del_index; i < 99; i++) {
-            task_array[i] = task_array[i+1];
-            task_array[i]->task_no -= 1;
+        std::cout << del_index;
+        if (del_index != -1) {
+          if (index == 1) {
+            destroy_task(task_array[del_index]);
+          } else {
+            for (int i = del_index; i < index-1; i++) {
+              destroy_task(task_array[i]);
+              task_array[i] = task_array[i+1];
+              task_array[i]->task_no -= 1;
+            }
           }
+          index -= 1;
         }
-        index -= 1;
         break;
       case 3:
+        if (index == 0) {
+          std::cout << "Error: Cannot update task if no tasks exists!\n";
+          break;
+        }
         break;
       case 4:
         if (index == 0) {
@@ -80,8 +93,10 @@ int main (void) {
         }
         break;
       case 5:
-        for (int i = 0; i < index; i++) {
-          destroy_task(task_array[i]);
+        if (index != 0) {
+          for (int i = 0; i < index; i++) {
+            destroy_task(task_array[i]);
+          }
         }
         std::cout << "***** Goodbye *****";
         return 0;
