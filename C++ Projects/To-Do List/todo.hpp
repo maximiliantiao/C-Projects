@@ -2,6 +2,7 @@
 #include <string.h>
 
 typedef struct to_do_list {
+  int task_no;
   std::string task;
   int priority;
   std::string date;
@@ -9,7 +10,9 @@ typedef struct to_do_list {
 
 ListItem *new_item(std::string item, int priority, std::string date);
 
-void delete_item(ListItem *);
+int deleted_item(ListItem **array, int task_number, int size);
+
+void destroy_task(ListItem *);
 
 ListItem *update_item(ListItem *);
 
