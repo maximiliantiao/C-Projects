@@ -27,7 +27,7 @@ int main (void) {
 
   ListItem *task_array[100];
   while (true) {
-    std::cout << "***** TO DO List *****\n\n";
+    std::cout << "\n\n***** TO DO List *****\n\n\n";
 
     int choice;
     std::cout << "Select a choice: \n";
@@ -35,12 +35,13 @@ int main (void) {
     std::cout << "2. Delete task from list\n";
     std::cout << "3. Update task from list\n";
     std::cout << "4. Print list\n";
-    std::cout << "5. Exit\n";
+    std::cout << "5. Exit\n\n";
+    std::cout << "Enter here: ";
     std::cin >> choice;
 
     switch (choice) {
       case 1:
-        std::cout << "***** Add a task *****\n\n";
+        std::cout << "\n\n***** Add a task *****\n\n\n";
         std::cout << "Enter task: ";
         std::cin.ignore();
         getline(std::cin, task);
@@ -54,6 +55,7 @@ int main (void) {
         index += 1;
         break;
       case 2:
+        std::cout << "\n\n***** Delete a task *****\n\n\n";
         if (index == 0) {
           std::cout << "Error: Cannot delete task if no tasks exists!\n";
           break;
@@ -76,15 +78,18 @@ int main (void) {
         }
         break;
       case 3:
+        std::cout << "\n\n***** Update a task *****\n\n\n";
         if (index == 0) {
           std::cout << "Error: Cannot update task if no tasks exists!\n";
           break;
         }
         std::cout << "Enter task number: ";
         std::cin >> task_number;
+        std::cout << "\n";
         update_item(task_array, task_number, index);
         break;
       case 4:
+        std::cout << "\n\n***** Print out tasks *****\n\n\n";
         if (index == 0) {
           std::cout << "No Tasks\n";
           break;
@@ -96,6 +101,7 @@ int main (void) {
         std::cout << "2. Detailed View\n";
         std::cin >> print_choice;
 
+        std::cout << "\n";
         while (avail_choice) {
           if (print_choice == 1) {
             for (int i = 0; i < index; i++) {
@@ -118,7 +124,7 @@ int main (void) {
             destroy_task(task_array[i]);
           }
         }
-        std::cout << "***** Goodbye *****\n\n";
+        std::cout << "\n\n***** Goodbye *****\n\n";
         return 0;
       default:
         break;
