@@ -1,4 +1,4 @@
-CC=-Wall -Werror -Wpedantic
+CC=-Wall -Werror -Wpedantic -pthread -l c
 
 test :	sort.c
 	clang $(CC) -o sort sort.c
