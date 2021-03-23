@@ -80,39 +80,64 @@ void *insertion_sort(void *param) {
 }
 
 void merge(int *arr, int start, int middle, int end) {
-  int copy[end + 1];
-  for (int i = 0; i <= end; i++) {
-    copy[i] = arr[i];
+  int first_size = middle - start + 1;
+  int second_size = end - middle;
+  int first_half[first_size];
+  int second_half[second_size];
+
+  for (int i = 0; i < first_size; i++) {
+    first_half[i] = arr[start + i];
   }
-  int first = start;
-  int second = middle + 1;
-  int index = 0;
-  while (first <= middle && second <= end) {
-    if (copy[first] <= copy[second]) {
-      arr[index] = copy[first];
+  for (int i = 0; i < second_size; i++) {
+    second_half[i] = arr[middle + 1 + i];
+  }
+  int first = 0;
+  int second = 0;
+  int index = start;
+  while (first < first_size && second < second_size) {
+    if (first_half[first] <= second_half[second]) {
+      arr[index] = first_half[first];
       first++;
     } else {
-      arr[index] = copy[second];
+      arr[index] = second_half[second];
       second++;
     }
     index++;
   }
-  while (first <= middle) {
-    arr[index] = copy[first];
+  while (first < first_size) {
+    arr[index] = first_half[first];
+    index++;
     first++;
-    index++;
   }
-  while (second <= end) {
-    arr[index] = copy[second];
+  while (second < second_size) {
+    arr[index] = second_half[second];
+    index++;
     second++;
-    index++;
   }
+}
+
+void merge_sort_single(int *arr, int start, int end) {
+  if (end > start) {
+    int middle = start + (end - start) / 2;
+    merge_sort_single(arr, start, middle);
+    merge_sort_single(arr, middle + 1, end);
+    merge(arr, start, middle, end);
+  }
+}
+
+void *merge_sort(void *param) {
+  args_t *args = (args_t *) param;
+  int *arr = (int *) args->arr;
+  int start = (int) args->start;
+  int end = (int) args->end;
+  merge_sort_single(arr, start, end);
+  return NULL;
 }
 
 int main(void) {
   clock_t begin, end;
   srand(time(0));
-  pthread_t pt[3];
+  pthread_t pt[2];
   int length = (rand() % 20) + 1;
   int middle = length / 2;
   int *input = (int *) calloc(length, sizeof(int));
@@ -132,14 +157,14 @@ int main(void) {
 
   begin = clock();
 
-  pthread_create(&pt[0], NULL, insertion_sort, (void *) &to_pass_a);
-  pthread_create(&pt[1], NULL, insertion_sort, (void *) &to_pass_b);
+  pthread_create(&pt[0], NULL, bubble_sort, (void *) &to_pass_a);
+  pthread_create(&pt[1], NULL, bubble_sort, (void *) &to_pass_b);
 
   pthread_join(pt[0], NULL);
   pthread_join(pt[1], NULL);
 
-  // assert(is_sorted(to_pass_a.arr, to_pass_a.start, to_pass_a.end) == true);
-  // assert(is_sorted(to_pass_b.arr, to_pass_b.start, to_pass_b.end) == true);
+  assert(is_sorted(to_pass_a.arr, to_pass_a.start, to_pass_a.end) == true);
+  assert(is_sorted(to_pass_b.arr, to_pass_b.start, to_pass_b.end) == true);
 
   for (int i = middle + 1; i < length; i++) {
     to_pass_a.arr[i] = to_pass_b.arr[i];
@@ -151,7 +176,7 @@ int main(void) {
 
   end = clock();
 
-  // assert(is_sorted(to_pass_a.arr, to_pass_a.start, to_pass_a.end) == true);
+  assert(is_sorted(to_pass_a.arr, to_pass_a.start, to_pass_a.end) == true);
 
   for (int i = 0; i < length; i++) {
     printf("%d ", to_pass_a.arr[i]);
