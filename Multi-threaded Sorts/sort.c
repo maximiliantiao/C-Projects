@@ -41,7 +41,6 @@ void *selection_sort(void *param) {
     SWAP(arr[min_index], arr[index]);
     index++;
   }
-
   pthread_exit(NULL);
 }
 
@@ -61,7 +60,22 @@ void *bubble_sort(void *param) {
       }
     }
   } while (swapped);
-  
+  pthread_exit(NULL);
+}
+
+void *insertion_sort(void *param) {
+  args_t *args = (args_t *) param;
+  int *arr = (int *) args->arr;
+  int start = (int) args->start;
+  int end = (int) args->end;
+
+  for (int i = start + 1; i <= end; i++) {
+    int current = i;
+    while (current > start && arr[current - 1] > arr[current]) {
+      SWAP(arr[current - 1], arr[current]);
+      current--;
+    }
+  }
   pthread_exit(NULL);
 }
 
@@ -118,8 +132,8 @@ int main(void) {
 
   begin = clock();
 
-  pthread_create(&pt[0], NULL, bubble_sort, (void *) &to_pass_a);
-  pthread_create(&pt[1], NULL, bubble_sort, (void *) &to_pass_b);
+  pthread_create(&pt[0], NULL, insertion_sort, (void *) &to_pass_a);
+  pthread_create(&pt[1], NULL, insertion_sort, (void *) &to_pass_b);
 
   pthread_join(pt[0], NULL);
   pthread_join(pt[1], NULL);
