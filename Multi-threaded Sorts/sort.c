@@ -149,11 +149,46 @@ void *merge_sort(void *param) {
   return NULL;
 }
 
+
+int partition(int *arr, int start, int end) {
+  int pivot_value = arr[end];
+  int slow = start - 1;
+
+  for (int fast = start; fast < end; fast++) {
+    if (arr[fast] < pivot_value) {
+      slow++;
+      SWAP(arr[slow], arr[fast]);
+    }
+  }
+  SWAP(arr[slow + 1], arr[end]);
+  return slow + 1;
+}
+
+/*
+ * Pseudocode used: https://www.geeksforgeeks.org/quick-sort/
+ */ 
+void quick_sort_single(int *arr, int start, int end) {
+  if (start < end) {
+    int pivot = partition(arr, start, end);
+    quick_sort_single(arr, start, pivot - 1);
+    quick_sort_single(arr, pivot + 1, end);
+  }
+}
+
+void *quick_sort(void *param) {
+  args_t *args = (args_t *) param;
+  int *arr = (int *) args->arr;
+  int start = (int) args->start;
+  int end = (int) args->end;
+  quick_sort_single(arr, start, end);
+  return NULL;
+}
+
 int main(void) {
   clock_t begin, end;
   srand(time(0));
   pthread_t pt[2];
-  int length = (rand() % 20) + 1;
+  int length = (rand() % 20) + 20;
   int middle = length / 2;
   int *input = (int *) calloc(length, sizeof(int));
   for (int i = 0; i < length; i++) {
@@ -172,14 +207,14 @@ int main(void) {
 
   begin = clock();
 
-  pthread_create(&pt[0], NULL, bubble_sort, (void *) &to_pass_a);
-  pthread_create(&pt[1], NULL, bubble_sort, (void *) &to_pass_b);
+  pthread_create(&pt[0], NULL, quick_sort, (void *) &to_pass_a);
+  pthread_create(&pt[1], NULL, quick_sort, (void *) &to_pass_b);
 
   pthread_join(pt[0], NULL);
   pthread_join(pt[1], NULL);
 
-  // assert(is_sorted(to_pass_a.arr, to_pass_a.start, to_pass_a.end) == true);
-  // assert(is_sorted(to_pass_b.arr, to_pass_b.start, to_pass_b.end) == true);
+  assert(is_sorted(to_pass_a.arr, to_pass_a.start, to_pass_a.end) == true);
+  assert(is_sorted(to_pass_b.arr, to_pass_b.start, to_pass_b.end) == true);
 
   for (int i = middle + 1; i < length; i++) {
     to_pass_a.arr[i] = to_pass_b.arr[i];
@@ -191,7 +226,7 @@ int main(void) {
 
   end = clock();
 
-  // assert(is_sorted(to_pass_a.arr, to_pass_a.start, to_pass_a.end) == true);
+  assert(is_sorted(to_pass_a.arr, to_pass_a.start, to_pass_a.end) == true);
 
   for (int i = 0; i < length; i++) {
     printf("%d ", to_pass_a.arr[i]);
